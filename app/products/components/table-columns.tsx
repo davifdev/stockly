@@ -1,10 +1,27 @@
 "use client";
 
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+} from "@/app/components/ui/alert-dialog";
 import { Badge } from "@/app/components/ui/badge";
 import { Button } from "@/app/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/app/components/ui/dropdown-menu";
 import { ProductDto } from "@/app/data-access/get-products";
 import { ColumnDef } from "@tanstack/react-table";
-import { CircleIcon, EllipsisIcon } from "lucide-react";
+import {
+  CircleIcon,
+  ClipboardCopyIcon,
+  EllipsisIcon,
+  SquarePenIcon,
+  TrashIcon,
+} from "lucide-react";
+import DeleteDialogContent from "./delete-dialog-content";
 
 const getStatusLabel = (label: string) => {
   if (label) {
@@ -49,10 +66,35 @@ export const columns: ColumnDef<ProductDto>[] = [
   {
     accessorKey: "actions",
     header: "Ações",
-    cell: () => (
-      <Button variant="ghost">
-        <EllipsisIcon />
-      </Button>
+    cell: ({ row: { original: product } }) => (
+      <AlertDialog>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost">
+              <EllipsisIcon />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem
+              onClick={() => navigator.clipboard.writeText(product.id)}
+            >
+              <ClipboardCopyIcon />
+              Copiar ID
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <SquarePenIcon />
+              Editar
+            </DropdownMenuItem>
+            <AlertDialogTrigger asChild>
+              <DropdownMenuItem>
+                <TrashIcon />
+                Excluir
+              </DropdownMenuItem>
+            </AlertDialogTrigger>
+          </DropdownMenuContent>
+        </DropdownMenu>
+        <DeleteDialogContent />
+      </AlertDialog>
     ),
   },
 ];

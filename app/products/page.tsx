@@ -6,7 +6,6 @@ import { columns } from "./components/table-columns";
 
 const ProductsPage = async () => {
   const products = await getProduct();
-  console.log(products);
   return (
     <div className="p-8 space-y-5 w-full">
       <div className="flex justify-between items-center">

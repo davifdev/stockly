@@ -1,4 +1,5 @@
 import "server-only";
+
 import { db } from "../lib/prisma";
 import { Product } from "../generated/prisma/client";
 
