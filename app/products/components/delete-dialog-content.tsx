@@ -7,8 +7,16 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/app/components/ui/alert-dialog";
+import { deleteProduct } from "@/app/services/products/delete-product";
+interface DeleteDialogContetProps {
+  productId: string;
+}
 
-const DeleteDialogContent = () => {
+const DeleteDialogContent = ({ productId }: DeleteDialogContetProps) => {
+  const handleContinueClick = async () => {
+    await deleteProduct({ productId });
+  };
+
   return (
     <AlertDialogContent>
       <AlertDialogHeader>
@@ -19,8 +27,10 @@ const DeleteDialogContent = () => {
         </AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>
-        <AlertDialogCancel>Cancel</AlertDialogCancel>
-        <AlertDialogAction>Continue</AlertDialogAction>
+        <AlertDialogCancel>Cancelar</AlertDialogCancel>
+        <AlertDialogAction onClick={handleContinueClick}>
+          Continuar
+        </AlertDialogAction>
       </AlertDialogFooter>
     </AlertDialogContent>
   );

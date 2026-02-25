@@ -37,7 +37,6 @@ const UpsertDialogContent = ({
   dialogClose,
   defaultValues,
 }: UpsertDialogContentProps) => {
-  console.log(defaultValues);
   const form = useForm<UpsertProductFormSchema>({
     resolver: zodResolver(upsertProductFormSchema),
     shouldUnregister: true,

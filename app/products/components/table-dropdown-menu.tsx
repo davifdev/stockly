@@ -28,8 +28,8 @@ const TableDropdownMenu = ({ product }: TableDropdownMenuProps) => {
   const [editIsOpen, setEditIsOpen] = useState(false);
 
   return (
-    <Dialog open={editIsOpen} onOpenChange={setEditIsOpen}>
-      <AlertDialog>
+    <AlertDialog>
+      <Dialog open={editIsOpen} onOpenChange={setEditIsOpen}>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost">
@@ -57,18 +57,18 @@ const TableDropdownMenu = ({ product }: TableDropdownMenuProps) => {
             </AlertDialogTrigger>
           </DropdownMenuContent>
         </DropdownMenu>
-        <DeleteDialogContent />
-      </AlertDialog>
-      <UpsertDialogContent
-        dialogClose={() => setEditIsOpen(false)}
-        defaultValues={{
-          id: product.id,
-          name: product.name,
-          price: Number(product.price),
-          stock: product.stock,
-        }}
-      />
-    </Dialog>
+        <UpsertDialogContent
+          dialogClose={() => setEditIsOpen(false)}
+          defaultValues={{
+            id: product.id,
+            name: product.name,
+            price: Number(product.price),
+            stock: product.stock,
+          }}
+        />
+        <DeleteDialogContent productId={product.id} />
+      </Dialog>
+    </AlertDialog>
   );
 };
 
