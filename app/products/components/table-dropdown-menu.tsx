@@ -19,11 +19,12 @@ import DeleteDialogContent from "./delete-dialog-content";
 import { Dialog, DialogTrigger } from "@/app/components/ui/dialog";
 import UpsertDialogContent from "./upsert-dialog-content";
 import { useState } from "react";
+import { Product } from "@/app/generated/prisma/client";
 interface TableDropdownMenuProps {
-  productId: string;
+  product: Product;
 }
 
-const TableDropdownMenu = ({ productId }: TableDropdownMenuProps) => {
+const TableDropdownMenu = ({ product }: TableDropdownMenuProps) => {
   const [editIsOpen, setEditIsOpen] = useState(false);
 
   return (
@@ -37,7 +38,7 @@ const TableDropdownMenu = ({ productId }: TableDropdownMenuProps) => {
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(productId)}
+              onClick={() => navigator.clipboard.writeText(product.id)}
             >
               <ClipboardCopyIcon />
               Copiar ID
@@ -58,7 +59,15 @@ const TableDropdownMenu = ({ productId }: TableDropdownMenuProps) => {
         </DropdownMenu>
         <DeleteDialogContent />
       </AlertDialog>
-      <UpsertDialogContent dialogClose={() => setEditIsOpen(false)} />
+      <UpsertDialogContent
+        dialogClose={() => setEditIsOpen(false)}
+        defaultValues={{
+          id: product.id,
+          name: product.name,
+          price: Number(product.price),
+          stock: product.stock,
+        }}
+      />
     </Dialog>
   );
 };

@@ -18,38 +18,41 @@ import {
 } from "@/app/components/ui/form";
 
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/app/components/ui/input";
 import { NumericFormat } from "react-number-format";
 import { Button } from "@/app/components/ui/button";
-
+import {
+  upsertProductFormSchema,
+  UpsertProductFormSchema,
+} from "@/app/validators/upsert-product-validator";
+import { upsertProduct } from "@/app/services/products/upsert-product";
 interface UpsertDialogContentProps {
   dialogClose: () => void;
+  defaultValues: UpsertProductFormSchema;
 }
 
-const formSchema = z.object({
-  name: z.string().min(1, "O nome é obrigatório"),
-  price: z.number().min(0, "O preço deve ser maior ou igual a 0"),
-  stock: z.number().min(0, "O estoque deve ser maior ou igual a 0"),
-});
-
-type FormValues = z.infer<typeof formSchema>;
-
-const UpsertDialogContent = ({ dialogClose }: UpsertDialogContentProps) => {
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+const UpsertDialogContent = ({
+  dialogClose,
+  defaultValues,
+}: UpsertDialogContentProps) => {
+  console.log(defaultValues);
+  const form = useForm<UpsertProductFormSchema>({
+    resolver: zodResolver(upsertProductFormSchema),
     shouldUnregister: true,
-    defaultValues: {
+    defaultValues: defaultValues ?? {
       name: "",
       price: 0,
-      stock: 1,
+      stock: 0,
     },
   });
 
-  const onSubmit = (data: FormValues) => {
+  const isEditing = !!defaultValues;
+
+  const onSubmit = async (data: UpsertProductFormSchema) => {
     dialogClose();
-    console.log(data);
+    await upsertProduct({ ...data, id: defaultValues?.id });
   };
 
   return (
@@ -57,7 +60,9 @@ const UpsertDialogContent = ({ dialogClose }: UpsertDialogContentProps) => {
       <Form {...form}>
         <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
           <DialogHeader>
-            <DialogTitle>Cadastrar produto</DialogTitle>
+            <DialogTitle>
+              {isEditing ? "Editar Produto" : "Cadastrar Produto"}
+            </DialogTitle>
             <DialogDescription>Insira as informações abaixo</DialogDescription>
           </DialogHeader>
           <FormField
@@ -118,7 +123,9 @@ const UpsertDialogContent = ({ dialogClose }: UpsertDialogContentProps) => {
                 Cancelar
               </Button>
             </DialogClose>
-            <Button type="submit">Criar produto</Button>
+            <Button type="submit">
+              {isEditing ? "Editar Produto " : "Criar Produto"}
+            </Button>
           </DialogFooter>
         </form>
       </Form>

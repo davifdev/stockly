@@ -5,6 +5,7 @@ import { ProductDto } from "@/app/data-access/get-products";
 import { ColumnDef } from "@tanstack/react-table";
 import TableDropdownMenu from "./table-dropdown-menu";
 import { CircleIcon } from "lucide-react";
+import { formatCurrency } from "@/app/helpers/formatCurrency";
 
 const getStatusLabel = (label: string) => {
   if (label) {
@@ -22,6 +23,8 @@ export const columns: ColumnDef<ProductDto>[] = [
   {
     accessorKey: "price",
     header: "Valor unitário",
+    cell: ({ row: { original: product } }) =>
+      formatCurrency(Number(product.price)),
   },
   {
     accessorKey: "stock",
@@ -50,7 +53,7 @@ export const columns: ColumnDef<ProductDto>[] = [
     accessorKey: "actions",
     header: "Ações",
     cell: ({ row: { original: product } }) => (
-      <TableDropdownMenu productId={product.id} />
+      <TableDropdownMenu product={product} />
     ),
   },
 ];
