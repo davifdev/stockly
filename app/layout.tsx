@@ -12,7 +12,6 @@ export const metadata: Metadata = {
   title: "Stockly",
   description: "Gerenciador de estoque para pequenas empresas",
 };
-
 export default function RootLayout({
   children,
 }: Readonly<{
