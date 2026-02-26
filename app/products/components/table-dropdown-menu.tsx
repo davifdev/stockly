@@ -20,12 +20,18 @@ import { Dialog, DialogTrigger } from "@/app/components/ui/dialog";
 import UpsertDialogContent from "./upsert-dialog-content";
 import { useState } from "react";
 import { Product } from "@/app/generated/prisma/client";
+import { toast } from "sonner";
 interface TableDropdownMenuProps {
   product: Product;
 }
 
 const TableDropdownMenu = ({ product }: TableDropdownMenuProps) => {
   const [editIsOpen, setEditIsOpen] = useState(false);
+
+  const handleCopyID = () => {
+    navigator.clipboard.writeText(product.id);
+    toast.success("ID copiado com sucesso");
+  };
 
   return (
     <AlertDialog>
@@ -37,9 +43,7 @@ const TableDropdownMenu = ({ product }: TableDropdownMenuProps) => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(product.id)}
-            >
+            <DropdownMenuItem onClick={handleCopyID}>
               <ClipboardCopyIcon />
               Copiar ID
             </DropdownMenuItem>

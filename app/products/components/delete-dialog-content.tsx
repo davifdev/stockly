@@ -8,6 +8,7 @@ import {
   AlertDialogTitle,
 } from "@/app/components/ui/alert-dialog";
 import { deleteProduct } from "@/app/services/products/delete-product";
+import { toast } from "sonner";
 interface DeleteDialogContetProps {
   productId: string;
 }
@@ -15,6 +16,7 @@ interface DeleteDialogContetProps {
 const DeleteDialogContent = ({ productId }: DeleteDialogContetProps) => {
   const handleContinueClick = async () => {
     await deleteProduct({ productId });
+    toast.success("Produto deletado com sucesso");
   };
 
   return (

@@ -28,9 +28,10 @@ import {
   UpsertProductFormSchema,
 } from "@/app/validators/upsert-product-validator";
 import { upsertProduct } from "@/app/services/products/upsert-product";
+import { toast } from "sonner";
 interface UpsertDialogContentProps {
   dialogClose: () => void;
-  defaultValues: UpsertProductFormSchema;
+  defaultValues?: UpsertProductFormSchema;
 }
 
 const UpsertDialogContent = ({
@@ -52,6 +53,9 @@ const UpsertDialogContent = ({
   const onSubmit = async (data: UpsertProductFormSchema) => {
     dialogClose();
     await upsertProduct({ ...data, id: defaultValues?.id });
+    isEditing
+      ? toast.success("Produto editado com sucesso")
+      : toast.success("Produto criado com sucesso");
   };
 
   return (
