@@ -1,11 +1,16 @@
 "use client";
 
-import { Button } from "@/app/components/ui/button";
 import { SalesDto } from "@/app/data-access/get-sale";
 import { ColumnDef } from "@tanstack/react-table";
-import { EllipsisIcon } from "lucide-react";
+import SaleTableDropdownMenu from "./table-dropdown-menu";
+import { ProductDto } from "@/app/data-access/get-products";
+import { ComboboxOption } from "@/app/components/ui/combobox";
+interface SalesTableColumn extends SalesDto {
+  products: ProductDto[];
+  productOption: ComboboxOption[];
+}
 
-export const columns: ColumnDef<SalesDto>[] = [
+export const columns: ColumnDef<SalesTableColumn>[] = [
   {
     accessorKey: "productNames",
     header: "Produtos",
@@ -25,10 +30,12 @@ export const columns: ColumnDef<SalesDto>[] = [
   {
     accessorKey: "actions",
     header: "Ações",
-    cell: () => (
-      <Button variant="ghost">
-        <EllipsisIcon />
-      </Button>
+    cell: ({ row: { original: sale } }) => (
+      <SaleTableDropdownMenu
+        sale={sale}
+        productsOptions={sale.productOption}
+        products={sale.products}
+      />
     ),
   },
 ];
