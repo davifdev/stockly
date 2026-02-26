@@ -14,6 +14,7 @@ import { Input } from "@/app/components/ui/input";
 import {
   SheetContent,
   SheetDescription,
+  SheetFooter,
   SheetHeader,
   SheetTitle,
 } from "@/app/components/ui/sheet";
@@ -22,6 +23,7 @@ import {
   TableBody,
   TableCaption,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -30,10 +32,12 @@ import {
 import { Product } from "@/app/generated/prisma/client";
 import { formatCurrency } from "@/app/helpers/formatCurrency";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { PlusIcon } from "lucide-react";
-import { useState } from "react";
+import { CheckIcon, PlusIcon } from "lucide-react";
+import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
+import UpsertSaleTableDropdownMenu from "./upsert-table-dropdown-menu";
+import { toast } from "sonner";
 
 interface SelectedProduct {
   id: string;
@@ -87,6 +91,19 @@ const UpsertSheetContent = ({
       ];
     });
   };
+
+  const onDelete = (productId: string) => {
+    setSelectedProducts((prev) => {
+      return prev.filter((product) => product.id !== productId);
+    });
+    toast.success("Produto deletado com sucesso");
+  };
+
+  const productTotal = useMemo(() => {
+    return selectedProducts.reduce((acc, product) => {
+      return (acc += product.price * product.quantity);
+    }, 0);
+  }, [selectedProducts]);
 
   return (
     <SheetContent className="w-full !max-w-2xl">
@@ -158,10 +175,28 @@ const UpsertSheetContent = ({
               <TableCell>
                 {formatCurrency(product.price * product.quantity)}
               </TableCell>
+              <TableCell>
+                <UpsertSaleTableDropdownMenu
+                  onDelete={onDelete}
+                  product={product}
+                />
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
+        <TableFooter>
+          <TableRow>
+            <TableCell colSpan={4}>Total</TableCell>
+            <TableCell>{formatCurrency(productTotal)}</TableCell>
+          </TableRow>
+        </TableFooter>
       </Table>
+      <SheetFooter className="pt-4">
+        <Button className="w-full" disabled={selectedProducts.length === 0}>
+          <CheckIcon />
+          Finalizar Venda
+        </Button>
+      </SheetFooter>
     </SheetContent>
   );
 };
