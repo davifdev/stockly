@@ -15,17 +15,16 @@ const ProductsPage = async () => {
 
   return (
     <div className="p-8 space-y-5 w-full">
-      <div className="flex justify-between items-center">
-        <HeaderContainer>
-          <HeaderLeft>
-            <HeaderSubtitle>Produtos</HeaderSubtitle>
-            <HeaderTitle>Gestão de produtos</HeaderTitle>
-          </HeaderLeft>
-          <HeaderRight>
-            <CreateProductButton />
-          </HeaderRight>
-        </HeaderContainer>
-      </div>
+      <HeaderContainer>
+        <HeaderLeft>
+          <HeaderSubtitle>Produtos</HeaderSubtitle>
+          <HeaderTitle>Gestão de produtos</HeaderTitle>
+        </HeaderLeft>
+        <HeaderRight>
+          <CreateProductButton />
+        </HeaderRight>
+      </HeaderContainer>
+
       <div className="bg-white rounded-md">
         <DataTable
           columns={columns}
