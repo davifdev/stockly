@@ -37,6 +37,7 @@ import { useState } from "react";
 import { ComboboxOption } from "@/app/components/ui/combobox";
 import { SalesDto } from "@/app/data-access/get-sale";
 import { ProductDto } from "@/app/data-access/get-products";
+import { deleteSale } from "@/app/services/sales/delete-sale";
 
 interface SalesTableDropdownMenuProps {
   sale: Pick<SalesDto, "id" | "saleProducts">;
@@ -50,6 +51,9 @@ export default function SaleTableDropdownMenu({
   products,
 }: SalesTableDropdownMenuProps) {
   const [upsertSheetIsOpen, setUpsertSheetIsOpen] = useState(false);
+
+  const handleConfirmDeleteClick = async () =>
+    await deleteSale({ id: sale.id });
 
   return (
     <Sheet open={upsertSheetIsOpen} onOpenChange={setUpsertSheetIsOpen}>
@@ -97,7 +101,7 @@ export default function SaleTableDropdownMenu({
           <AlertDialogFooter>
             <AlertDialogCancel>Cancelar</AlertDialogCancel>
             <AlertDialogAction asChild>
-              <Button variant="destructive" onClick={() => {}}>
+              <Button variant="destructive" onClick={handleConfirmDeleteClick}>
                 Continuar
               </Button>
             </AlertDialogAction>
