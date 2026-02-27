@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/app/components/ui/button";
 import {
   DropdownMenuContent,
@@ -22,7 +24,7 @@ const UpsertSaleTableDropdownMenu = ({
 }: UpsertSaleTableDropdownMenuProps) => {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
+      <DropdownMenuTrigger asChild>
         <Button variant="ghost">
           <MoreHorizontalIcon />
         </Button>

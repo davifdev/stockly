@@ -15,13 +15,13 @@ import { columns } from "./components/table-columns";
 const SalesPage = async () => {
   const sales = await getSales();
   const products = await getProduct();
-  const productOptions: ComboboxOption[] = products.map((product) => {
+  const productsOptions: ComboboxOption[] = products.map((product) => {
     return { value: product.id, label: product.name };
   });
   const tableData = sales.map((sale) => ({
     ...sale,
     products,
-    productOptions,
+    productsOptions,
   }));
 
   return (
@@ -33,7 +33,7 @@ const SalesPage = async () => {
         </HeaderLeft>
         <HeaderRight>
           <CreateSaleButton
-            productOptions={productOptions}
+            productsOptions={productsOptions}
             products={JSON.parse(JSON.stringify(products))}
           />
         </HeaderRight>

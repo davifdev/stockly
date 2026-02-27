@@ -48,11 +48,11 @@ interface SelectedProduct {
 }
 
 interface UpsertSheetContentProps {
-  saleId: string;
-  productOptions: ComboboxOption[];
+  saleId?: string;
+  productsOptions: ComboboxOption[];
   products: Product[];
   onSuccess: () => void;
-  defaultSelectedProducts: SelectedProduct[];
+  defaultSelectedProducts?: SelectedProduct[];
 }
 
 const upsertFormSchema = z.object({
@@ -64,12 +64,13 @@ type UpsertFormSchema = z.infer<typeof upsertFormSchema>;
 
 const UpsertSheetContent = ({
   saleId,
-  productOptions,
+  productsOptions,
   products,
   onSuccess,
+  defaultSelectedProducts,
 }: UpsertSheetContentProps) => {
   const [selectedProducts, setSelectedProducts] = useState<SelectedProduct[]>(
-    [],
+    defaultSelectedProducts ?? [],
   );
   const form = useForm<UpsertFormSchema>({
     resolver: zodResolver(upsertFormSchema),
@@ -141,7 +142,7 @@ const UpsertSheetContent = ({
                   <Combobox
                     placeholder="Selecione um produto"
                     {...field}
-                    options={productOptions}
+                    options={productsOptions}
                   />
                 </FormControl>
                 <FormMessage />

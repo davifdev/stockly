@@ -10,12 +10,12 @@ import { useState } from "react";
 
 interface CreateSaleButtonProps {
   products: Product[];
-  productOptions: ComboboxOption[];
+  productsOptions: ComboboxOption[];
 }
 
 const CreateSaleButton = ({
   products,
-  productOptions,
+  productsOptions,
 }: CreateSaleButtonProps) => {
   const [sheetIsOpen, setSheetIsOpen] = useState(false);
 
@@ -25,7 +25,7 @@ const CreateSaleButton = ({
 
   return (
     <Sheet open={sheetIsOpen} onOpenChange={setSheetIsOpen}>
-      <SheetTrigger>
+      <SheetTrigger asChild>
         <Button>
           <PlusIcon />
           Adicionar Venda
@@ -33,7 +33,7 @@ const CreateSaleButton = ({
       </SheetTrigger>
       <UpsertSheetContent
         products={products}
-        productOptions={productOptions}
+        productsOptions={productsOptions}
         onSuccess={onSuccess}
       />
     </Sheet>
