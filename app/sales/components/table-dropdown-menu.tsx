@@ -105,8 +105,16 @@ export default function SaleTableDropdownMenu({
         </AlertDialogContent>
       </AlertDialog>
       <UpsertSheetContent
+        saleId={sale.id}
         productOptions={productsOptions}
         products={products}
+        onSuccess={() => setUpsertSheetIsOpen(false)}
+        defaultSelectedProducts={sale.saleProducts.map((saleProduct) => ({
+          id: saleProduct.productId,
+          quantity: saleProduct.quantity,
+          name: saleProduct.productName,
+          price: Number(saleProduct.unitPrice),
+        }))}
       />
     </Sheet>
   );

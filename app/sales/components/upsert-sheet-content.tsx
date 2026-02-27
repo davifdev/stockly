@@ -38,6 +38,7 @@ import { useForm } from "react-hook-form";
 import z from "zod";
 import UpsertSaleTableDropdownMenu from "./upsert-table-dropdown-menu";
 import { toast } from "sonner";
+import { upsertSale } from "@/app/services/sales/upsert-sale";
 
 interface SelectedProduct {
   id: string;
@@ -47,9 +48,11 @@ interface SelectedProduct {
 }
 
 interface UpsertSheetContentProps {
+  saleId: string;
   productOptions: ComboboxOption[];
   products: Product[];
-  onSuccess?: () => void;
+  onSuccess: () => void;
+  defaultSelectedProducts: SelectedProduct[];
 }
 
 const upsertFormSchema = z.object({
@@ -60,8 +63,10 @@ const upsertFormSchema = z.object({
 type UpsertFormSchema = z.infer<typeof upsertFormSchema>;
 
 const UpsertSheetContent = ({
+  saleId,
   productOptions,
   products,
+  onSuccess,
 }: UpsertSheetContentProps) => {
   const [selectedProducts, setSelectedProducts] = useState<SelectedProduct[]>(
     [],
@@ -90,6 +95,17 @@ const UpsertSheetContent = ({
         },
       ];
     });
+  };
+
+  const onSubmitSale = async () => {
+    const products = selectedProducts.map((product) => ({
+      id: product.id,
+      quantity: product.quantity,
+    }));
+
+    await upsertSale({ id: saleId, products });
+    toast.success("Venda realizada com sucesso");
+    onSuccess();
   };
 
   const onDelete = (productId: string) => {
@@ -192,7 +208,11 @@ const UpsertSheetContent = ({
         </TableFooter>
       </Table>
       <SheetFooter className="pt-4">
-        <Button className="w-full" disabled={selectedProducts.length === 0}>
+        <Button
+          className="w-full"
+          disabled={selectedProducts.length === 0}
+          onClick={onSubmitSale}
+        >
           <CheckIcon />
           Finalizar Venda
         </Button>
