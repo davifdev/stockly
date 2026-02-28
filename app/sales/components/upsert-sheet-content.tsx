@@ -57,7 +57,7 @@ interface UpsertSheetContentProps {
 
 const upsertFormSchema = z.object({
   productId: z.uuid("O produto é obrigatório"),
-  quantity: z.coerce.number<number>().positive(),
+  quantity: z.coerce.number<number>().positive("A quantidade é obrigatória"),
 });
 
 type UpsertFormSchema = z.infer<typeof upsertFormSchema>;
@@ -86,6 +86,33 @@ const UpsertSheetContent = ({
     );
     if (!selectedProduct) return;
     setSelectedProducts((prev) => {
+      const existingProduct = prev.find(
+        (product) => product.id === selectedProduct.id,
+      );
+      if (existingProduct) {
+        const productIsOutOfStock =
+          existingProduct.quantity + data.quantity > selectedProduct.stock;
+        if (productIsOutOfStock) {
+          form.setError("quantity", {
+            message: "Quantidade indisponível em estoque",
+          });
+          return prev;
+        }
+        form.reset();
+        return prev.map((product) =>
+          product.id === selectedProduct.id
+            ? { ...product, quantity: product.quantity + data.quantity }
+            : product,
+        );
+      }
+      const productIsOutOfStock = data.quantity > selectedProduct.stock;
+      if (productIsOutOfStock) {
+        form.setError("quantity", {
+          message: "Quantidade indisponivel em estoque",
+        });
+        return prev;
+      }
+      form.reset();
       return [
         ...prev,
         {
@@ -122,10 +149,14 @@ const UpsertSheetContent = ({
     }, 0);
   }, [selectedProducts]);
 
+  const isEditing = !!saleId;
+
   return (
     <SheetContent className="w-full !max-w-2xl">
       <SheetHeader>
-        <SheetTitle>Adicionar Venda</SheetTitle>
+        <SheetTitle>
+          {isEditing ? "Editar Venda" : "Adicionar Venda"}
+        </SheetTitle>
         <SheetDescription>
           Insira as informações de venda abaixo
         </SheetDescription>
@@ -215,7 +246,7 @@ const UpsertSheetContent = ({
           onClick={onSubmitSale}
         >
           <CheckIcon />
-          Finalizar Venda
+          {isEditing ? "Salvar Informações" : " Finalizar Venda"}
         </Button>
       </SheetFooter>
     </SheetContent>
