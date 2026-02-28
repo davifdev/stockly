@@ -5,15 +5,20 @@ import {
   SummaryCardSubtitle,
   SummaryCardTitle,
 } from "./summary-card";
+import { formatCurrency } from "@/app/helpers/formatCurrency";
 
-const TotalRevenueCard = () => {
+interface TotalRevenueCardProps {
+  totalRevenue: number;
+}
+
+const TotalRevenueCard = ({ totalRevenue }: TotalRevenueCardProps) => {
   return (
     <SummaryCard>
       <SummaryCardIcon>
         <DollarSignIcon />
       </SummaryCardIcon>
       <SummaryCardSubtitle>Receita total</SummaryCardSubtitle>
-      <SummaryCardTitle>R$ 45.231,89</SummaryCardTitle>
+      <SummaryCardTitle>{formatCurrency(totalRevenue)}</SummaryCardTitle>
     </SummaryCard>
   );
 };

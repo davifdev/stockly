@@ -6,14 +6,18 @@ import {
   SummaryCardTitle,
 } from "./summary-card";
 
-const TotalStockCard = () => {
+interface TotalStockCardProps {
+  totalStock: number;
+}
+
+const TotalStockCard = ({ totalStock }: TotalStockCardProps) => {
   return (
     <SummaryCard>
       <SummaryCardIcon>
         <PackageIcon />
       </SummaryCardIcon>
       <SummaryCardSubtitle>Total em estoque</SummaryCardSubtitle>
-      <SummaryCardTitle>20.000</SummaryCardTitle>
+      <SummaryCardTitle>{totalStock}</SummaryCardTitle>
     </SummaryCard>
   );
 };

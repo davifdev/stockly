@@ -5,15 +5,19 @@ import {
   SummaryCardSubtitle,
   SummaryCardTitle,
 } from "./summary-card";
+import { formatCurrency } from "@/app/helpers/formatCurrency";
+interface TodayRevenueCardProps {
+  todayRevenue: number;
+}
 
-const TodayRevenueCard = () => {
+const TodayRevenueCard = ({ todayRevenue }: TodayRevenueCardProps) => {
   return (
     <SummaryCard>
       <SummaryCardIcon>
         <DollarSignIcon />
       </SummaryCardIcon>
       <SummaryCardSubtitle>Receita hoje</SummaryCardSubtitle>
-      <SummaryCardTitle>R$ 231,89</SummaryCardTitle>
+      <SummaryCardTitle>{formatCurrency(todayRevenue)}</SummaryCardTitle>
     </SummaryCard>
   );
 };

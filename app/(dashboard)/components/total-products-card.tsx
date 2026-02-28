@@ -6,14 +6,18 @@ import {
   SummaryCardTitle,
 } from "./summary-card";
 
-const TotalProductsCard = () => {
+interface TotalProductsCardProps {
+  totalProducts: number;
+}
+
+const TotalProductsCard = ({ totalProducts }: TotalProductsCardProps) => {
   return (
     <SummaryCard>
       <SummaryCardIcon>
         <ShoppingBasketIcon />
       </SummaryCardIcon>
       <SummaryCardSubtitle>Produtos</SummaryCardSubtitle>
-      <SummaryCardTitle>60</SummaryCardTitle>
+      <SummaryCardTitle>{totalProducts}</SummaryCardTitle>
     </SummaryCard>
   );
 };
