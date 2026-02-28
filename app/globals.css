@@ -64,8 +64,7 @@
   }
 }
 
-@layer {
-  body {
-    @apply bg-background text-foreground;
-  }
+body,
+html {
+  @apply h-screen bg-background;
 }
