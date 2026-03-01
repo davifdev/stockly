@@ -5,6 +5,7 @@ import {
   HeaderTitle,
 } from "../components/header";
 import { getDashboard } from "../data-access/get-dashboard";
+import MostSoldProductItem from "./components/most-sold-products-item";
 import RevenueChart from "./components/revenue-chart";
 import TodayRevenueCard from "./components/today-revenue-card";
 import TotalProductsCard from "./components/total-products-card";
@@ -20,6 +21,7 @@ export default async function Home() {
     totalSales,
     totalStock,
     totalLast14DaysRevenues,
+    mostSoldProducts,
   } = await getDashboard();
   return (
     <div className="p-8 w-full space-y-6 flex flex-col">
@@ -49,7 +51,14 @@ export default async function Home() {
           <RevenueChart data={totalLast14DaysRevenues} />
         </div>
         <div className="flex flex-col h-full bg-white overflow-hidden p-6 rounded-xl">
-          <p>Contéudo</p>
+          <p className="text-lg font-semibold text-slate-900 mb-6">
+            Produtos mais vendidos
+          </p>
+          <div className="overflow-y-auto space-y-6">
+            {mostSoldProducts.map((product) => (
+              <MostSoldProductItem product={product} key={product.productId} />
+            ))}
+          </div>
         </div>
       </div>
     </div>
