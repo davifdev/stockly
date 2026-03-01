@@ -1,6 +1,5 @@
 import { db } from "@/app/lib/prisma";
 import { ProductStatus } from "../get-products";
-
 export interface MostSoldProductDto {
   productId: string;
   name: string;
