@@ -5,12 +5,10 @@ import {
   SummaryCardSubtitle,
   SummaryCardTitle,
 } from "./summary-card";
+import { getTotalSales } from "@/app/data-access/dashboard/get-total-sales";
 
-interface TotalSalesCardProps {
-  totalSales: number;
-}
-
-const TotalSalesCard = ({ totalSales }: TotalSalesCardProps) => {
+const TotalSalesCard = async () => {
+  const totalSales = await getTotalSales();
   return (
     <SummaryCard>
       <SummaryCardIcon>

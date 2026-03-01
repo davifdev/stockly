@@ -43,3 +43,15 @@ export const SummaryCardSubtitle = ({
     </p>
   );
 };
+
+export const SummaryCardSkeleton = () => {
+  return (
+    <div className="rounded-xl bg-white p-6">
+      <div className="space-y-2">
+        <div className="h-9 w-9 bg-gray-200 rounded-md" />
+        <div className="h-5 w-[82.26px] bg-gray-200 rounded-md" />
+        <div className="h-8 w-48 bg-gray-200 rounded-md" />
+      </div>
+    </div>
+  );
+};

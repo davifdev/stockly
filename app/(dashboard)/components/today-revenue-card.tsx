@@ -6,11 +6,10 @@ import {
   SummaryCardTitle,
 } from "./summary-card";
 import { formatCurrency } from "@/app/helpers/formatCurrency";
-interface TodayRevenueCardProps {
-  todayRevenue: number;
-}
+import { getTodayRevenue } from "@/app/data-access/dashboard/get-today-revenue";
 
-const TodayRevenueCard = ({ todayRevenue }: TodayRevenueCardProps) => {
+const TodayRevenueCard = async () => {
+  const todayRevenue = await getTodayRevenue();
   return (
     <SummaryCard>
       <SummaryCardIcon>
