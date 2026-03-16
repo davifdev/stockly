@@ -6,7 +6,7 @@ import { deleteProductSchema } from "@/app/validators/delete-product-validator";
 import { returnValidationErrors } from "next-safe-action";
 import { revalidatePath } from "next/cache";
 
-actionClient
+export const deleteProduct = actionClient
   .inputSchema(deleteProductSchema)
   .action(async ({ parsedInput: { productId } }) => {
     if (!productId) {
