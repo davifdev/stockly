@@ -1,24 +1,25 @@
 "use server";
 
 import { db } from "@/app/lib/prisma";
-import {
-  upsertProductFormSchema,
-  UpsertProductFormSchema,
-} from "@/app/validators/upsert-product-validator";
+import { actionClient } from "@/app/lib/safe-action";
+import { upsertProductFormSchema } from "@/app/validators/upsert-product-validator";
+import { returnValidationErrors } from "next-safe-action";
 import { revalidatePath } from "next/cache";
 
-export const upsertProduct = async (data: UpsertProductFormSchema) => {
-  const parsedData = upsertProductFormSchema.safeParse(data);
+export const upsertProduct = actionClient
+  .inputSchema(upsertProductFormSchema)
+  .action(async ({ parsedInput: data }) => {
+    if (!data) {
+      returnValidationErrors(upsertProductFormSchema, {
+        _errors: ["Dados dos produtos inválidos"],
+      });
+    }
 
-  if (!parsedData) {
-    throw new Error("Dados inválidos");
-  }
+    await db.product.upsert({
+      where: { id: data.id ?? "" },
+      update: data,
+      create: data,
+    });
 
-  await db.product.upsert({
-    where: { id: data.id ?? "" },
-    update: data,
-    create: data,
+    revalidatePath("/products");
   });
-
-  revalidatePath("/products");
-};

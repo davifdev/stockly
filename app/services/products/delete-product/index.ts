@@ -1,20 +1,24 @@
 "use server";
 
 import { db } from "@/app/lib/prisma";
-import {
-  deleteProductSchema,
-  DeleteProductSchema,
-} from "@/app/validators/delete-product-validator";
+import { actionClient } from "@/app/lib/safe-action";
+import { deleteProductSchema } from "@/app/validators/delete-product-validator";
+import { returnValidationErrors } from "next-safe-action";
 import { revalidatePath } from "next/cache";
 
-export const deleteProduct = async ({ productId }: DeleteProductSchema) => {
-  deleteProductSchema.safeParse(productId);
+actionClient
+  .inputSchema(deleteProductSchema)
+  .action(async ({ parsedInput: { productId } }) => {
+    if (!productId) {
+      returnValidationErrors(deleteProductSchema, {
+        _errors: ["ID do produto não encontrado"],
+      });
+    }
+    await db.product.delete({
+      where: {
+        id: productId,
+      },
+    });
 
-  await db.product.delete({
-    where: {
-      id: productId,
-    },
+    revalidatePath("/products");
   });
-
-  revalidatePath("/products");
-};

@@ -31,7 +31,7 @@ export default async function Home() {
         </Suspense>
         <Suspense fallback={<SummaryCardSkeleton />}>
           <TodayRevenueCard />
-        </Suspense>
+        </Suspense> 
       </div>
       <div className="grid grid-cols-3 gap-6">
         <Suspense fallback={<SummaryCardSkeleton />}>

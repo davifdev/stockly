@@ -109,6 +109,7 @@ export default function SaleTableDropdownMenu({
         </AlertDialogContent>
       </AlertDialog>
       <UpsertSheetContent
+        isOpen={upsertSheetIsOpen}
         saleId={sale.id}
         productsOptions={productsOptions}
         products={products}

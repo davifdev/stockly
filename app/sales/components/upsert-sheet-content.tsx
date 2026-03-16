@@ -33,12 +33,14 @@ import { Product } from "@/app/generated/prisma/client";
 import { formatCurrency } from "@/app/helpers/formatCurrency";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckIcon, PlusIcon } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import UpsertSaleTableDropdownMenu from "./upsert-table-dropdown-menu";
 import { toast } from "sonner";
 import { upsertSale } from "@/app/services/sales/upsert-sale";
+import { useAction } from "next-safe-action/hooks";
+import { flattenValidationErrors } from "next-safe-action";
 
 interface SelectedProduct {
   id: string;
@@ -48,6 +50,7 @@ interface SelectedProduct {
 }
 
 interface UpsertSheetContentProps {
+  isOpen: boolean;
   saleId?: string;
   productsOptions: ComboboxOption[];
   products: Product[];
@@ -63,6 +66,7 @@ const upsertFormSchema = z.object({
 type UpsertFormSchema = z.infer<typeof upsertFormSchema>;
 
 const UpsertSheetContent = ({
+  isOpen,
   saleId,
   productsOptions,
   products,
@@ -72,6 +76,16 @@ const UpsertSheetContent = ({
   const [selectedProducts, setSelectedProducts] = useState<SelectedProduct[]>(
     defaultSelectedProducts ?? [],
   );
+  const { execute: executeUpsertSale } = useAction(upsertSale, {
+    onError: ({ error: { validationErrors, serverError } }) => {
+      const flattendErrors = flattenValidationErrors(validationErrors);
+      toast.error(serverError ?? flattendErrors.formErrors[0]);
+    },
+    onSuccess: () => {
+      toast.success("Venda realizada com sucesso");
+      onSuccess();
+    },
+  });
   const form = useForm<UpsertFormSchema>({
     resolver: zodResolver(upsertFormSchema),
     defaultValues: {
@@ -79,6 +93,17 @@ const UpsertSheetContent = ({
       quantity: 1,
     },
   });
+
+  useEffect(() => {
+    if (!isOpen) {
+      setSelectedProducts([]);
+      form.reset();
+    }
+  }, [form, isOpen]);
+
+  useEffect(() => {
+    setSelectedProducts(defaultSelectedProducts ?? []);
+  }, [defaultSelectedProducts]);
 
   const onSubmit = (data: UpsertFormSchema) => {
     const selectedProduct = products.find(
@@ -126,14 +151,13 @@ const UpsertSheetContent = ({
   };
 
   const onSubmitSale = async () => {
-    const products = selectedProducts.map((product) => ({
-      id: product.id,
-      quantity: product.quantity,
-    }));
-
-    await upsertSale({ id: saleId, products });
-    toast.success("Venda realizada com sucesso");
-    onSuccess();
+    executeUpsertSale({
+      id: saleId,
+      products: selectedProducts.map((product) => ({
+        id: product.id,
+        quantity: product.quantity,
+      })),
+    });
   };
 
   const onDelete = (productId: string) => {

@@ -1,3 +1,4 @@
+// Apenas Simulando a busca de dados com Route Handle
 import { db } from "@/app/lib/prisma";
 
 export const GET = async () => {

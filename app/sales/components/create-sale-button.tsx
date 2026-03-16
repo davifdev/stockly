@@ -32,6 +32,7 @@ const CreateSaleButton = ({
         </Button>
       </SheetTrigger>
       <UpsertSheetContent
+        isOpen={sheetIsOpen}
         products={products}
         productsOptions={productsOptions}
         onSuccess={onSuccess}

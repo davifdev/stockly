@@ -29,6 +29,8 @@ import {
 } from "@/app/validators/upsert-product-validator";
 import { upsertProduct } from "@/app/services/products/upsert-product";
 import { toast } from "sonner";
+import { useAction } from "next-safe-action/hooks";
+import { flattenValidationErrors } from "next-safe-action";
 interface UpsertDialogContentProps {
   dialogClose: () => void;
   defaultValues?: UpsertProductFormSchema;
@@ -50,12 +52,23 @@ const UpsertDialogContent = ({
 
   const isEditing = !!defaultValues;
 
+  const { execute: executeUpsertProduct } = useAction(upsertProduct, {
+    onError: ({ error: { validationErrors, serverError } }) => {
+      const flattendErrors = flattenValidationErrors(validationErrors);
+      toast.error(serverError ?? flattendErrors.formErrors[0]);
+    },
+    onSuccess: () => {
+      {
+        isEditing
+          ? toast.success("Produto editado com sucesso")
+          : toast.success("Produto criado com sucesso");
+      }
+      dialogClose();
+    },
+  });
+
   const onSubmit = async (data: UpsertProductFormSchema) => {
-    dialogClose();
-    await upsertProduct({ ...data, id: defaultValues?.id });
-    isEditing
-      ? toast.success("Produto editado com sucesso")
-      : toast.success("Produto criado com sucesso");
+    executeUpsertProduct({ ...data, id: defaultValues?.id });
   };
 
   return (
