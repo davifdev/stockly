@@ -26,3 +26,16 @@
 * ESLint - Linting para qualidade do código
 * Husky - Git hooks framework
 * ts-node - Executar TypeScript no Node.js
+
+# Iniciar Projeto
+
+```
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
+Abra em http://localhost:3000 com seu navegador para ver o resultado.
