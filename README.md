@@ -1,4 +1,4 @@
-# Stoclky - Gerenciador de Estoque para pequenas Empresas
+# Stockly - Gerenciador de Estoque para pequenas Empresas
 <img width="1705" height="881" alt="modified_image (1)" src="https://github.com/user-attachments/assets/58aad857-e178-4c28-9611-7ad9981ab5d7" />
 <img width="1705" height="816" alt="modified_image" src="https://github.com/user-attachments/assets/67f4283c-f836-485a-8c3e-dea5fb0aa181" />
 <img width="1705" height="816" alt="modified_image (2)" src="https://github.com/user-attachments/assets/1a61c489-297a-4d86-81c5-466403e1443d" />
